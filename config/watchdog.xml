@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+	<context:annotation-config />
+
+	<bean id="logbackConfigurer" class="org.taktik.icure.logging.LogbackConfigurer" init-method="init" destroy-method="destroy" lazy-init="false">
+		<property name="configFile" value="config/modules/core/logback_watchdog.xml" />
+		<property name="systemProperties">
+			<map>
+				<entry key="logs.path" value="${icure.path.logs}" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="cacheManager" class="org.springframework.cache.support.NoOpCacheManager" />
+
+	<bean id="nodeWatcher" class="org.taktik.icure.db.NodeWatcher">
+		<property name="homeDir" value="${icure.home.dir}" />
+	</bean>
+
+	<task:scheduled-tasks scheduler="myScheduler">
+		<task:scheduled ref="nodeWatcher" method="checkNodes" fixed-delay="${icure.nodes.update.delay}" />
+	</task:scheduled-tasks>
+
+	<task:scheduler id="myScheduler" pool-size="5" />
+</beans>

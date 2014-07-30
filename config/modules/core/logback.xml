@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+
+	<appender name="logfile.icure" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logs.path}/icure.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logs.path}/icure.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d [%-10.10thread] %-5level %50.50logger{50} | %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="logfile.icure.async" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="logfile.icure" />
+	</appender>
+
+	<appender name="logfile.ftpserver" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logs.path}/ftpserver.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logs.path}/ftpserver.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d %5p [%t] [%c] [%X{userName}] [%X{remoteIp}] : %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="logfile.ftpserver.async" class="ch.qos.logback.classic.AsyncAppender">
+		<appender-ref ref="logfile.ftpserver" />
+	</appender>
+
+	<!-- Hazelcast -->
+	<logger name="com.hazelcast" level="INFO" />
+
+	<!-- Spring -->
+
+	<logger name="org.springframework" level="WARN" />
+
+	<!-- icure -->
+
+	<logger name="org.taktik" level="INFO" />
+
+	<logger name="org.taktik.icure.dao" level="INFO" />
+
+	<logger name="org.taktik.icure.security.anonymous.AnonymousAuthenticationFilter" level="INFO" />
+
+	<logger name="org.taktik.commons.io.http.HTTPStreamer" level="INFO" />
+
+	<logger name="org.taktik.service.transformationservice" level="INFO" />
+
+	<logger name="org.taktik.hotfolder.impl.SizeBasedHotFolderImpl" level="INFO" />
+
+	<logger name="org.apache.pdfbox" level="INFO" />
+
+	<!-- ActiveMQ -->
+	<logger name="org.apache.activemq" level="WARN" />
+
+	<!-- Spring Security -->
+
+	<logger name="org.taktik.icure.security" level="INFO" />
+
+	<logger name="org.springframework.security" level="WARN" />
+
+	<!-- Apache SSHD -->
+
+	<logger name="org.apache.sshd" level="WARN" />
+
+	<!-- Apache FTPServer -->
+
+	<logger name="org.apache.ftpserver" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="logfile.ftpserver.async" />
+	</logger>
+	<logger name="org.apache.mina" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="logfile.ftpserver.async" />
+	</logger>
+
+	<logger name="org.eclipse.jetty" level="WARN" />
+
+	<logger name="org.apache.jasper" level="WARN" />
+
+	<logger name="org.apache.commons" level="WARN" />
+
+	<logger name="org.elasticsearch" level="WARN" />
+
+	<logger name="com.netflix.astyanax" level="WARN" />
+
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="logfile.icure.async" />
+	</root>
+</configuration>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+	<contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL>
+	</contextListener>
+
+	<appender name="logfile.watchdog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logs.path}/watchdog.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${logs.path}/watchdog.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d [%-10.10thread] %-5level %50.50logger{50} | %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.taktik">
+		<level value="INFO" />
+	</logger>
+
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="logfile.watchdog" />
+	</root>
+</configuration>

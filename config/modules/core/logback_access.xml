@@ -1,0 +1,17 @@
+<configuration>
+	<statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+
+	<appender name="logfile.access" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${accesslogs.path}/access.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${accesslogs.path}/access.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%v:%localPort %h %l %u [%t] "%r" %s %b "%i{Referer}" "%i{User-Agent}"</pattern>
+		</encoder>
+	</appender>
+
+	<appender-ref ref="logfile.access" />
+</configuration>
